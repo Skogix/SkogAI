@@ -1,8 +1,8 @@
 [run]
-source = project_name
+source = skogai
 
 [report]
 omit =
     */python?.?/*
     */site-packages/nose/*
-    project_name/__main__.py
+    skogai/__main__.py
