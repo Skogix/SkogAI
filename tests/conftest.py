@@ -1,15 +1,24 @@
-import os
 import sys
 import pytest
-from fastapi.testclient import TestClient
-from typer.testing import CliRunner
-from sqlalchemy.exc import IntegrityError
 
-# This next line ensures tests uses its own database and settings environment
-os.environ["FORCE_ENV_FOR_DYNACONF"] = "testing"  # noqa
-# WARNING: Ensure imports from `skogai` comes after this line
-from skogai import app, settings, db  # noqa
-from skogai.cli import create_user, cli  # noqa
+from skogai import create_app
+from skogai.ext.commands import populate_db
+from skogai.ext.database import db
+
+
+@pytest.fixture(scope="session")
+def app():
+    app = create_app(FORCE_ENV_FOR_DYNACONF="testing")
+    with app.app_context():
+        db.create_all(app=app)
+        yield app
+        db.drop_all(app=app)
+
+
+@pytest.fixture(scope="session")
+def products(app):
+    with app.app_context():
+        return populate_db()
 
 
 # each test runs on cwd to its temp dir
@@ -22,60 +31,3 @@ def go_to_tmpdir(request):
     # Chdir only for the duration of the test.
     with tmpdir.as_cwd():
         yield
-
-
-@pytest.fixture(scope="function", name="app")
-def _app():
-    return app
-
-
-@pytest.fixture(scope="function", name="cli")
-def _cli():
-    return cli
-
-
-@pytest.fixture(scope="function", name="settings")
-def _settings():
-    return settings
-
-
-@pytest.fixture(scope="function")
-def api_client():
-    return TestClient(app)
-
-
-@pytest.fixture(scope="function")
-def api_client_authenticated():
-
-    try:
-        create_user("admin", "admin", superuser=True)
-    except IntegrityError:
-        pass
-
-    client = TestClient(app)
-    token = client.post(
-        "/token",
-        data={"username": "admin", "password": "admin"},
-        headers={"Content-Type": "application/x-www-form-urlencoded"},
-    ).json()["access_token"]
-    client.headers["Authorization"] = f"Bearer {token}"
-    return client
-
-
-@pytest.fixture(scope="function")
-def cli_client():
-    return CliRunner()
-
-
-def remove_db():
-    # Remove the database file
-    try:
-        os.remove("testing.db")
-    except FileNotFoundError:
-        pass
-
-
-@pytest.fixture(scope="session", autouse=True)
-def initialize_db(request):
-    db.create_db_and_tables(db.engine)
-    request.addfinalizer(remove_db)

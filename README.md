@@ -1,18 +1,23 @@
-# FastAPI Project Template
+> [!IMPORTANT]
+> This template is **archived**.  
+> UV can now [generate a sample project](https://docs.astral.sh/uv/guides/projects/#creating-a-new-project)  
+> I recommend using **UV** to bootstrap your peojects.  
+> [Copier](https://github.com/copier-org/copier) is a tools that can bootstrap projects from templates.  
 
-The base to start an openapi project featuring: SQLModel, Typer, FastAPI, JWT Token Auth, Interactive Shell, Management Commands. 
 
-See also
+# Flask Project Template
 
--  [Python-Project-Template](https://github.com/rochacbruno/python-project-template/) for a lean, low dependency Python app.
--  [Flask-Project-Template](https://github.com/rochacbruno/flask-project-template/) for a full feature Flask project including database, API, admin interface, etc.
+A full feature Flask project template.
 
+See also 
+- [Python-Project-Template](https://github.com/rochacbruno/python-project-template/) for a lean, low dependency Python app.
+- [FastAPI-Project-Template](https://github.com/rochacbruno/fastapi-project-template/) The base to start an openapi project featuring: SQLModel, Typer, FastAPI, JWT Token Auth, Interactive Shell, Management Commands.
 
 ### HOW TO USE THIS TEMPLATE
 
-> **DO NOT FORK** this is meant to be used from **[Use this template](https://github.com/rochacbruno/fastapi-project-template/generate)** feature.
+> **DO NOT FORK** this is meant to be used from **[Use this template](https://github.com/rochacbruno/flask-project-template/generate)** feature.
 
-1. Click on **[Use this template](https://github.com/rochacbruno/fastapi-project-template/generate)**
+1. Click on **[Use this template](https://github.com/rochacbruno/flask-project-template/generate)**
 3. Give a name to your project  
    (e.g. `my_awesome_project` recommendation is to use all lowercase and underscores separation for repo names.)
 3. Wait until the first run of CI finishes  
@@ -26,7 +31,7 @@ See also
 
 ### What is included on this template?
 
-- 🖼️ The base to start an openapi project featuring: SQLModel, Typer, FastAPI, VueJS.
+- 🍾 A full feature Flask application with CLI, API, Admin interface, web UI and modular configuration.
 - 📦 A basic [setup.py](setup.py) file to provide installation, packaging and distribution for your project.  
   Template uses setuptools because it's the de-facto standard for Python packages, you can run `make switch-to-poetry` later if you want.
 - 🤖 A [Makefile](Makefile) with the most useful commands to install, test, lint, format and release your project.
@@ -42,30 +47,26 @@ See also
 - 🔄 Continuous integration using [Github Actions](.github/workflows/) with jobs to lint, test and release your project on Linux, Mac and Windows environments.
 
 > Curious about architectural decisions on this template? read [ABOUT_THIS_TEMPLATE.md](ABOUT_THIS_TEMPLATE.md)  
-> If you want to contribute to this template please open an [issue](https://github.com/rochacbruno/fastapi-project-template/issues) or fork and send a PULL REQUEST.
-
-[❤️ Sponsor this project](https://github.com/sponsors/rochacbruno/)
+> If you want to contribute to this template please open an [issue](https://github.com/rochacbruno/flask-project-template/issues) or fork and send a PULL REQUEST.
 
 <!--  DELETE THE LINES ABOVE THIS AND WRITE YOUR PROJECT README BELOW -->
 
 ---
-# skogai
+# skogai Flask Application
 
-[![codecov](https://codecov.io/gh/Skogix/SkogAI/branch/main/graph/badge.svg?token=SkogAI_token_here)](https://codecov.io/gh/Skogix/SkogAI)
-[![CI](https://github.com/Skogix/SkogAI/actions/workflows/main.yml/badge.svg)](https://github.com/Skogix/SkogAI/actions/workflows/main.yml)
+Awesome skogai created by 
 
-Awesome skogai created by Skogix
+## Installation
 
-## Install
+From source:
 
-from source
 ```bash
-git clone https://github.com/Skogix/SkogAI skogai
+git clone https://github.com//skogai skogai
 cd skogai
 make install
 ```
 
-from pypi
+From pypi:
 
 ```bash
 pip install skogai
@@ -73,210 +74,41 @@ pip install skogai
 
 ## Executing
 
+This application has a CLI interface that extends the Flask CLI.
+
+Just run:
+
 ```bash
-$ skogai run --port 8080
+$ skogai
 ```
 
 or
 
 ```bash
-python -m skogai run --port 8080
+$ python -m skogai
 ```
 
-or
+To see the help message and usage instructions.
+
+## First run
 
 ```bash
-$ uvicorn skogai:app
+skogai create-db   # run once
+skogai populate-db  # run once (optional)
+skogai add-user -u admin -p 1234  # ads a user
+skogai run
 ```
 
-## CLI
+Go to:
 
-```bash
-❯ skogai --help
-Usage: skogai [OPTIONS] COMMAND [ARGS]...
-
-Options:
-  --install-completion [bash|zsh|fish|powershell|pwsh]
-                                  Install completion for the specified shell.
-  --show-completion [bash|zsh|fish|powershell|pwsh]
-                                  Show completion for the specified shell, to
-                                  copy it or customize the installation.
-  --help                          Show this message and exit.
-
-Commands:
-  create-user  Create user
-  run          Run the API server.
-  shell        Opens an interactive shell with objects auto imported
-```
-
-### Creating a user
-
-```bash
-❯ skogai create-user --help
-Usage: skogai create-user [OPTIONS] USERNAME PASSWORD
-
-  Create user
-
-Arguments:
-  USERNAME  [required]
-  PASSWORD  [required]
-
-Options:
-  --superuser / --no-superuser  [default: no-superuser]
-  --help 
-```
-
-**IMPORTANT** To create an admin user on the first run:
-
-```bash
-skogai create-user admin admin --superuser
-```
-
-### The Shell
-
-You can enter an interactive shell with all the objects imported.
-
-```bash
-❯ skogai shell       
-Auto imports: ['app', 'settings', 'User', 'engine', 'cli', 'create_user', 'select', 'session', 'Content']
-
-In [1]: session.query(Content).all()
-Out[1]: [Content(text='string', title='string', created_time='2021-09-14T19:25:00.050441', user_id=1, slug='string', id=1, published=False, tags='string')]
-
-In [2]: user = session.get(User, 1)
-
-In [3]: user.contents
-Out[3]: [Content(text='string', title='string', created_time='2021-09-14T19:25:00.050441', user_id=1, slug='string', id=1, published=False, tags='string')]
-```
-
-## API
-
-Run with `skogai run` and access http://127.0.0.1:8000/docs
-
-![](https://raw.githubusercontent.com/rochacbruno/fastapi-project-template/master/docs/api.png)
+- Website: http://localhost:5000
+- Admin: http://localhost:5000/admin/
+  - user: admin, senha: 1234
+- API GET:
+  - http://localhost:5000/api/v1/product/
+  - http://localhost:5000/api/v1/product/1
+  - http://localhost:5000/api/v1/product/2
+  - http://localhost:5000/api/v1/product/3
 
 
-**For some api calls you must authenticate** using the user created with `skogai create-user`.
-
-## Testing
-
-``` bash
-❯ make test
-Black All done! ✨ 🍰 ✨
-13 files would be left unchanged.
-Isort All done! ✨ 🍰 ✨
-6 files would be left unchanged.
-Success: no issues found in 13 source files
-================================ test session starts ===========================
-platform linux -- Python 3.9.6, pytest-6.2.5, py-1.10.0, pluggy-1.0.0 -- 
-/fastapi-project-template/.venv/bin/python3
-cachedir: .pytest_cache
-rootdir: /fastapi-project-template
-plugins: cov-2.12.1
-collected 10 items                                                                                                                               
-
-tests/test_app.py::test_using_testing_db PASSED                           [ 10%]
-tests/test_app.py::test_index PASSED                                      [ 20%]
-tests/test_cli.py::test_help PASSED                                       [ 30%]
-tests/test_cli.py::test_cmds_help[run-args0---port] PASSED                [ 40%]
-tests/test_cli.py::test_cmds_help[create-user-args1-create-user] PASSED   [ 50%]
-tests/test_cli.py::test_cmds[create-user-args0-created admin2 user] PASSED[ 60%]
-tests/test_content_api.py::test_content_create PASSED                     [ 70%]
-tests/test_content_api.py::test_content_list PASSED                       [ 80%]
-tests/test_user_api.py::test_user_list PASSED                             [ 90%]
-tests/test_user_api.py::test_user_create PASSED                           [100%]
-
------------ coverage: platform linux, python 3.9.6-final-0 -----------
-Name                              Stmts   Miss  Cover
------------------------------------------------------
-skogai/__init__.py              4      0   100%
-skogai/app.py                  16      1    94%
-skogai/cli.py                  21      0   100%
-skogai/config.py                5      0   100%
-skogai/db.py                   10      0   100%
-skogai/models/__init__.py       0      0   100%
-skogai/models/content.py       47      1    98%
-skogai/routes/__init__.py      11      0   100%
-skogai/routes/content.py       52     25    52%
-skogai/routes/security.py      15      1    93%
-skogai/routes/user.py          52     26    50%
-skogai/security.py            103     12    88%
------------------------------------------------------
-TOTAL                               336     66    80%
-
-
-========================== 10 passed in 2.34s ==================================
-
-```
-
-## Linting and Formatting
-
-```bash
-make lint  # checks for linting errors
-make fmt   # formats the code
-```
-
-
-## Configuration
-
-This project uses [Dynaconf](https://dynaconf.com) to manage configuration.
-
-```py
-from skogai.config import settings
-```
-
-## Acessing variables
-
-```py
-settings.get("SECRET_KEY", default="sdnfjbnfsdf")
-settings["SECRET_KEY"]
-settings.SECRET_KEY
-settings.db.uri
-settings["db"]["uri"]
-settings["db.uri"]
-settings.DB__uri
-```
-
-## Defining variables
-
-### On files
-
-settings.toml
-
-```toml
-[development]
-dynaconf_merge = true
-
-[development.db]
-echo = true
-```
-
-> `dynaconf_merge` is a boolean that tells if the settings should be merged with the default settings defined in skogai/default.toml.
-
-### As environment variables
-```bash
-export skogai_KEY=value
-export skogai_KEY="@int 42"
-export skogai_KEY="@jinja {{ this.db.uri }}"
-export skogai_DB__uri="@jinja {{ this.db.uri | replace('db', 'data') }}"
-```
-
-### Secrets
-
-There is a file `.secrets.toml` where your sensitive variables are stored,
-that file must be ignored by git. (add that to .gitignore)
-
-Or store your secrets in environment variables or a vault service, Dynaconf
-can read those variables.
-
-### Switching environments
-
-```bash
-skogai_ENV=production skogai run
-```
-
-Read more on https://dynaconf.com
-
-## Development
-
-Read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+> **Note**: You can also use `flask run` to run the application.
